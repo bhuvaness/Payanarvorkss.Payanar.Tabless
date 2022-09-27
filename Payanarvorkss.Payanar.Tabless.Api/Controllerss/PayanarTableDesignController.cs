@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MongoDB.Driver;
 using Payanarvorkss.Payanar.Tabless.Api.DataModelss;
+using System.Collections.Generic;
 using System.Text.Json;
 
 namespace Payanarvorkss.Payanar.Tabless.Api.Controllerss
@@ -36,7 +37,7 @@ namespace Payanarvorkss.Payanar.Tabless.Api.Controllerss
             return Ok(result);
         }
         [HttpPatch]
-        public IEnumerable<PayanarTableDesign> Update()
+        public async Task<PayanarTableDesign> Update()
         {
             var client = new MongoDB.Driver.MongoClient("mongodb+srv://bhuvaness:Kg3dQIRhQeKmKAt7@cluster0.dt0ycsn.mongodb.net/?retryWrites=true&w=majority");
             var database = client.GetDatabase("PayanarTabless");
@@ -45,7 +46,7 @@ namespace Payanarvorkss.Payanar.Tabless.Api.Controllerss
             return null;
         }
         [HttpDelete]
-        public IEnumerable<PayanarTableDesign> Delete()
+        public async Task<PayanarTableDesign> Delete()
         {
             var client = new MongoDB.Driver.MongoClient("mongodb+srv://bhuvaness:Kg3dQIRhQeKmKAt7@cluster0.dt0ycsn.mongodb.net/?retryWrites=true&w=majority");
             var database = client.GetDatabase("PayanarTabless");

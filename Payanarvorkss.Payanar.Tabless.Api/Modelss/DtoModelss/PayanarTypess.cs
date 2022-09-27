@@ -7,40 +7,42 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DtoModelss
     public interface IPayanarType
     {
         string UniqueId { get; set; }
+        string ParentUniqueId { get; set; }
         string Name { get; set; }
     }
     public class PayanarType : IPayanarType
     {
         public string UniqueId { get; set; } = String.Empty;
+        public string ParentUniqueId { get; set; } = String.Empty;
         public string Name { get; set; } = String.Empty;
     }
-    public interface IHierarchicalPayanarTableDesign : IPayanarType
+    public interface IHierarchicalPayanarType : IPayanarType
     {
-        IEnumerable<HierarchicalPayanarTableColumnDesign> Columns { get; set; }
+        IEnumerable<HierarchicalPayanarTypeColumn> Columns { get; set; }
     }
-    public class HierarchicalPayanarTableDesign : PayanarType, IHierarchicalPayanarTableDesign
+    public class HierarchicalPayanarType : PayanarType, IHierarchicalPayanarType
     {
-        public HierarchicalPayanarTableDesign()
+        public HierarchicalPayanarType()
         {
-            Columns = new List<HierarchicalPayanarTableColumnDesign>();
+            Columns = new List<HierarchicalPayanarTypeColumn>();
         }
-        public IEnumerable<HierarchicalPayanarTableColumnDesign> Columns { get; set; }
+        public IEnumerable<HierarchicalPayanarTypeColumn> Columns { get; set; }
     }
-    public interface IHierarchicalPayanarTableColumnDesign : IPayanarType
+    public interface IHierarchicalPayanarTypeColumn : IPayanarType
     {
     }
-    public class HierarchicalPayanarTableColumnDesign : PayanarType, IHierarchicalPayanarTableColumnDesign
+    public class HierarchicalPayanarTypeColumn : PayanarType, IHierarchicalPayanarTypeColumn
     {
     }
     public interface IPayanarTableDesign : IPayanarType
     {
         System.String OriginalName { get; set; }
-        IEnumerable<PayanarTableColumnDesign> Columnss { get; set; }
+        IEnumerable<PayanarTableColumnDesign> Columns { get; set; }
     }
     public class PayanarTableDesign : PayanarType, IPayanarTableDesign
     {
         public System.String OriginalName { get; set; } = String.Empty;
-        public IEnumerable<PayanarTableColumnDesign> Columnss { get; set; }
+        public IEnumerable<PayanarTableColumnDesign> Columns { get; set; }
     }
     public interface IPayanarTableColumnDesign : IPayanarType
     {

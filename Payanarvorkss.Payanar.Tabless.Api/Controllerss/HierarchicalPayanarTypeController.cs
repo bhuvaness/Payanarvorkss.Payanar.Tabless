@@ -12,44 +12,56 @@ namespace Payanarvorkss.Payanar.Tabless.Api.Controllerss
     public class HierarchicalPayanarTypeController : ControllerBase
     {
         [HttpPost]
-        public async Task<HierarchicalPayanarTableDesign> Create([FromBody] HierarchicalPayanarTableDesign tableDesign)
+        public async Task<HierarchicalPayanarTypeDesign> Create([FromBody] HierarchicalPayanarTypeDesign tableDesign)
         {
             var client = new MongoDB.Driver.MongoClient("mongodb+srv://bhuvaness:Kg3dQIRhQeKmKAt7@cluster0.dt0ycsn.mongodb.net/?retryWrites=true&w=majority");
             var database = client.GetDatabase("PayanarTabless");
-            var payanarTabless = database.GetCollection<HierarchicalPayanarTableDesign>("HierarchicalPayanarTypess");
+            var payanarTabless = database.GetCollection<HierarchicalPayanarTypeDesign>("HierarchicalPayanarTypess");
             ////var tableDesign = JsonSerializer.Deserialize<PayanarTableDesign>(json);
             await payanarTabless.InsertOneAsync(tableDesign);
             return tableDesign;
         }
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<HierarchicalPayanarTableDesign>>> Read()
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<HierarchicalPayanarTypeColumnDesign>>> Read(string id)
         {
+            IEnumerable<HierarchicalPayanarTypeColumnDesign> results = new List<HierarchicalPayanarTypeColumnDesign>();
             var client = new MongoDB.Driver.MongoClient("mongodb+srv://bhuvaness:Kg3dQIRhQeKmKAt7@cluster0.dt0ycsn.mongodb.net/?retryWrites=true&w=majority");
             var database = client.GetDatabase("PayanarTabless");
-            var payanarTabless = database.GetCollection<HierarchicalPayanarTableDesign>("HierarchicalPayanarTypess");
-            var query = await payanarTabless.FindAsync(x => !string.IsNullOrEmpty(x.UniqueId));
-            ////var totalTask = await query.CountAsync();
-            ////var itemsTask = query.Skip(0).Limit(10).ToListAsync();
-            ////await Task.WhenAll(totalTask, itemsTask);
-            ////return new Page { Total = totalTask.Result, Items = itemsTask.Result };
-            var result = query.ToList();
-            return Ok(result);
+            var payanarTypess = database.GetCollection<HierarchicalPayanarTypeDesign>("HierarchicalPayanarTypess");
+            var payanarTableDesignss = database.GetCollection<PayanarTableDesign>("PayanarTableDesignss");
+            var query = await payanarTypess.FindAsync(x => x.ParentUniqueId.Equals(id));
+            var query2 = await payanarTableDesignss.FindAsync(x => x.ParentUniqueId.Equals(id));
+
+            var hierarchicalTypess = query.ToList();
+            var tableDesignss = query2.ToList();
+
+            hierarchicalTypess?.ForEach(x =>
+            {
+                (results as IList<HierarchicalPayanarTypeColumnDesign>).Add(new HierarchicalPayanarTypeColumnDesign() { UniqueId = x.UniqueId, ParentUniqueId = x.ParentUniqueId, Name = x.Name, IsPayanarTableDesign = false });
+            });
+
+            tableDesignss?.ForEach(x =>
+            {
+                (results as IList<HierarchicalPayanarTypeColumnDesign>).Add(new HierarchicalPayanarTypeColumnDesign() { UniqueId = x.UniqueId, ParentUniqueId = x.ParentUniqueId, Name = x.Name, IsPayanarTableDesign = true });
+            });
+
+            return Ok(results);
         }
         [HttpPatch]
-        public IEnumerable<HierarchicalPayanarTableDesign> Update()
+        public IEnumerable<HierarchicalPayanarTypeDesign> Update()
         {
             var client = new MongoDB.Driver.MongoClient("mongodb+srv://bhuvaness:Kg3dQIRhQeKmKAt7@cluster0.dt0ycsn.mongodb.net/?retryWrites=true&w=majority");
             var database = client.GetDatabase("PayanarTabless");
-            var payanarTabless = database.GetCollection<HierarchicalPayanarTableDesign>("HierarchicalPayanarTypess");
+            var payanarTabless = database.GetCollection<HierarchicalPayanarTypeDesign>("HierarchicalPayanarTypess");
 
             return null;
         }
         [HttpDelete]
-        public IEnumerable<HierarchicalPayanarTableDesign> Delete()
+        public IEnumerable<HierarchicalPayanarTypeDesign> Delete()
         {
             var client = new MongoDB.Driver.MongoClient("mongodb+srv://bhuvaness:Kg3dQIRhQeKmKAt7@cluster0.dt0ycsn.mongodb.net/?retryWrites=true&w=majority");
             var database = client.GetDatabase("PayanarTabless");
-            var payanarTabless = database.GetCollection<HierarchicalPayanarTableDesign>("HierarchicalPayanarTypess");
+            var payanarTabless = database.GetCollection<HierarchicalPayanarTypeDesign>("HierarchicalPayanarTypess");
 
             return null;
         }

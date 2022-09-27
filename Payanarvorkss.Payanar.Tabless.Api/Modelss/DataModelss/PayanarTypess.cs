@@ -17,24 +17,19 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DataModelss
         [BsonElement("name")]
         public string Name { get; set; } = String.Empty;
     }
-    public interface IHierarchicalPayanarTableDesign : IPayanarType
-    {
-        IEnumerable<HierarchicalPayanarTableColumnDesign> Columns { get; set; }
-    }
-    public class HierarchicalPayanarTableDesign : PayanarType, IHierarchicalPayanarTableDesign
-    {
-        public HierarchicalPayanarTableDesign()
-        {
-            Columns = new List<HierarchicalPayanarTableColumnDesign>();
-        }
-        [BsonElement("columns")]
-        public IEnumerable<HierarchicalPayanarTableColumnDesign> Columns { get; set; }
-    }
-    public interface IHierarchicalPayanarTableColumnDesign : IPayanarType
+    public interface IHierarchicalPayanarTypeDesign : IPayanarType
     {
     }
-    public class HierarchicalPayanarTableColumnDesign : PayanarType, IHierarchicalPayanarTableColumnDesign
+    public class HierarchicalPayanarTypeDesign : PayanarType, IHierarchicalPayanarTypeDesign
     {
+    }
+    public interface IHierarchicalPayanarTypeColumnDesign : IPayanarType
+    {
+        bool IsPayanarTableDesign { get; set; }
+    }
+    public class HierarchicalPayanarTypeColumnDesign : PayanarType, IHierarchicalPayanarTypeColumnDesign
+    {
+        public bool IsPayanarTableDesign { get; set; } = false;
     }
     public interface IPayanarTableDesign : IPayanarType
     {
