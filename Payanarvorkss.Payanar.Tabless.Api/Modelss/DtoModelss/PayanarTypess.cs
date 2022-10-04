@@ -30,9 +30,11 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DtoModelss
     }
     public interface IHierarchicalPayanarTypeColumn : IPayanarType
     {
+        bool IsPayanarTableDesign { get; set; }
     }
     public class HierarchicalPayanarTypeColumn : PayanarType, IHierarchicalPayanarTypeColumn
     {
+        public bool IsPayanarTableDesign { get; set; }
     }
     public interface IPayanarTableDesign : IPayanarType
     {
@@ -46,15 +48,16 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DtoModelss
     }
     public interface IPayanarTableColumnDesign : IPayanarType
     {
-        System.String LeastPayanarTableColumnDesignUniqueIdentifier { get; set; }
-        System.String ReferencedPayanarTableColumnDesignUniqueIdentifier { get; set; }
-        System.String PayanarTableDesignUniqueIdentifier { get; set; }
+        System.String ReferencedPayanarTableDesignUniqueId { get; set; }
+        System.String ReferencedPayanarTableColumnDesignUniqueId { get; set; }
+        System.String LeastPayanarTableDesignUniqueId { get; set; }
+        System.String LeastPayanarTableColumnDesignUniqueId { get; set; }
     }
     public class PayanarTableColumnDesign : PayanarType, IPayanarTableColumnDesign
     {
-        public System.String LeastPayanarTableColumnDesignUniqueIdentifier { get; set; } = String.Empty;
-        public System.String ReferencedPayanarTableColumnDesignUniqueIdentifier { get; set; } = String.Empty;
-        public System.String PayanarTableDesignUniqueIdentifier { get; set; } = String.Empty;
-        public System.String ReferencedPayanarTableDesignUniqueIdentifier { get; set; } = String.Empty;
+        public System.String ReferencedPayanarTableDesignUniqueId { get; set; } = String.Empty;
+        public System.String ReferencedPayanarTableColumnDesignUniqueId { get; set; } = String.Empty;
+        public System.String LeastPayanarTableDesignUniqueId { get; set; } = String.Empty;
+        public System.String LeastPayanarTableColumnDesignUniqueId { get; set; } = String.Empty;
     }
 }

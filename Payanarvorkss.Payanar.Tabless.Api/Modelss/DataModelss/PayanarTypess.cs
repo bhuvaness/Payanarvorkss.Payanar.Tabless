@@ -49,20 +49,20 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DataModelss
     }
     public interface IPayanarTableColumnDesign : IPayanarType
     {
-        System.String LeastPayanarTableColumnDesignUniqueIdentifier { get; set; }
-        System.String ReferencedPayanarTableColumnDesignUniqueIdentifier { get; set; }
-        System.String PayanarTableDesignUniqueIdentifier { get; set; }
-        System.String ReferencedPayanarTableDesignUniqueIdentifier { get; set; }
+        System.String ReferencedPayanarTableDesignUniqueId { get; set; }
+        System.String ReferencedPayanarTableColumnDesignUniqueId { get; set; }
+        System.String LeastPayanarTableDesignUniqueId { get; set; }
+        System.String LeastPayanarTableColumnDesignUniqueId { get; set; }
     }
     public class PayanarTableColumnDesign : PayanarType, IPayanarTableColumnDesign
     {
-        [BsonElement("leastPayanarTableColumnDesignUniqueIdentifier")]
-        public System.String LeastPayanarTableColumnDesignUniqueIdentifier { get; set; } = String.Empty;
-        [BsonElement("referencedPayanarTableColumnDesignUniqueIdentifier")]
-        public System.String ReferencedPayanarTableColumnDesignUniqueIdentifier { get; set; } = String.Empty;
-        [BsonElement("payanarTableDesignUniqueIdentifier")]
-        public System.String PayanarTableDesignUniqueIdentifier { get; set; } = String.Empty;
-        [BsonElement("referencedPayanarTableDesignUniqueIdentifier")]
-        public System.String ReferencedPayanarTableDesignUniqueIdentifier { get; set; } = String.Empty;
+        [BsonElement("referencedPayanarTableDesignUniqueId")]
+        public System.String ReferencedPayanarTableDesignUniqueId { get; set; } = String.Empty;
+        [BsonElement("referencedPayanarTableColumnDesignUniqueId")]
+        public System.String ReferencedPayanarTableColumnDesignUniqueId { get; set; } = String.Empty;
+        [BsonElement("leastPayanarTableDesignUniqueId")]
+        public System.String LeastPayanarTableDesignUniqueId { get; set; } = String.Empty;
+        [BsonElement("leastPayanarTableColumnDesignUniqueId")]
+        public System.String LeastPayanarTableColumnDesignUniqueId { get; set; } = String.Empty;
     }
 }
