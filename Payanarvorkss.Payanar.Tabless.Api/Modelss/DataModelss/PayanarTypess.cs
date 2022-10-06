@@ -17,19 +17,42 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DataModelss
         [BsonElement("name")]
         public string Name { get; set; } = String.Empty;
     }
-    public interface IHierarchicalPayanarTypeDesign : IPayanarType
+    public interface IHierarchicalPayanarType : IPayanarType
     {
+        IEnumerable<IHierarchicalPayanarType> Children { get; set; }
     }
-    public class HierarchicalPayanarTypeDesign : PayanarType, IHierarchicalPayanarTypeDesign
+    public class HierarchicalPayanarType : PayanarType, IHierarchicalPayanarType
     {
+        public IEnumerable<IHierarchicalPayanarType> Children { get; set; }
     }
-    public interface IHierarchicalPayanarTypeColumnDesign : IPayanarType
+    public interface IHierarchicalPayanarTypeColumn : IPayanarType
     {
         bool IsPayanarTableDesign { get; set; }
+        IEnumerable<HierarchicalPayanarTypeColumn> Children { get; set; }
     }
-    public class HierarchicalPayanarTypeColumnDesign : PayanarType, IHierarchicalPayanarTypeColumnDesign
+    public class HierarchicalPayanarTypeColumn : PayanarType, IHierarchicalPayanarTypeColumn
     {
+        private static object _ogj = new object();
+        public HierarchicalPayanarTypeColumn()
+        {
+        }
         public bool IsPayanarTableDesign { get; set; } = false;
+        public PayanarTableDesign TableDesign { get; set; }
+        private IEnumerable<HierarchicalPayanarTypeColumn> _children = null;
+        public IEnumerable<HierarchicalPayanarTypeColumn> Children
+        {
+            get
+            {
+                lock (_ogj)
+                {
+                    if (_children == null)
+                        _children = new List<HierarchicalPayanarTypeColumn>();
+                }
+
+                return _children;
+            }
+            set { _children = value; }
+        }
     }
     public interface IPayanarTableDesign : IPayanarType
     {

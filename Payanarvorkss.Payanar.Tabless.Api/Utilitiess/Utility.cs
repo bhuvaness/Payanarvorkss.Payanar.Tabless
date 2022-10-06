@@ -5,6 +5,7 @@ namespace Payanarvorkss.Payanar.Tabless.Api.Utilitiess
 {
     public class Utility
     {
+        public static string FirstParentId { get { return "00000000-0000-0000-0000-000000000000"; } }
     }
     public class ConcreteTypeConverter<TConcrete> : JsonConverter
     {
