@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MongoDB.Driver;
 using Payanarvorkss.Payanar.Tabless.Api.DataModelss;
+using Payanarvorkss.Payanar.Tabless.Api.Responsess;
 using Payanarvorkss.Payanar.Tabless.Api.Utilitiess;
 using System.Text.Json;
 
@@ -49,8 +50,10 @@ namespace Payanarvorkss.Payanar.Tabless.Api.Controllerss
             return Ok(results);
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<HierarchicalPayanarTypeColumn>>> Read()
+        public async Task<ActionResult<GetHierarchicalPayanarTypeColumnssResponse>> Read()
         {
+            GetHierarchicalPayanarTypeColumnssResponse response = new GetHierarchicalPayanarTypeColumnssResponse();
+
             IEnumerable<HierarchicalPayanarTypeColumn> results = new List<HierarchicalPayanarTypeColumn>();
             var client = new MongoDB.Driver.MongoClient("mongodb+srv://bhuvaness:Kg3dQIRhQeKmKAt7@cluster0.dt0ycsn.mongodb.net/?retryWrites=true&w=majority");
             var database = client.GetDatabase("PayanarTabless");
@@ -65,7 +68,10 @@ namespace Payanarvorkss.Payanar.Tabless.Api.Controllerss
             var dic = ArrangeByParentId(hierarchicalTypess);
             ArrangeTreeStructure(results, dic, tableDesignss, Utility.FirstParentId);
 
-            return Ok(results);
+            response.HierarchicalPayanarTypeColumnss = results;
+            response.TableDesignss = tableDesignss;
+
+            return Ok(response);
         }
         private IDictionary<string, IEnumerable<HierarchicalPayanarTypeColumn>> ArrangeByParentId(IEnumerable<HierarchicalPayanarType> hierarchicals)
         {
