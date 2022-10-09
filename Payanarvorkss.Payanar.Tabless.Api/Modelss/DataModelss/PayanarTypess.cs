@@ -72,6 +72,7 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DataModelss
     }
     public interface IPayanarTableColumnDesign : IPayanarType
     {
+        System.String OriginalName { get; set; }
         System.String ReferencedPayanarTableDesignUniqueId { get; set; }
         System.String ReferencedPayanarTableColumnDesignUniqueId { get; set; }
         System.String LeastPayanarTableDesignUniqueId { get; set; }
@@ -79,6 +80,8 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DataModelss
     }
     public class PayanarTableColumnDesign : PayanarType, IPayanarTableColumnDesign
     {
+        [BsonElement("originalName")]
+        public System.String OriginalName { get; set; }
         [BsonElement("referencedPayanarTableDesignUniqueId")]
         public System.String ReferencedPayanarTableDesignUniqueId { get; set; } = String.Empty;
         [BsonElement("referencedPayanarTableColumnDesignUniqueId")]
