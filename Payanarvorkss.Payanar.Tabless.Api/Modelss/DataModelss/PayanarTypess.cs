@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 
 namespace Payanarvorkss.Payanar.Tabless.Api.DataModelss
 {
@@ -7,6 +8,7 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DataModelss
         string ParentUniqueId { get; set; }
         string UniqueId { get; set; }
         string Name { get; set; }
+        bool IsSystemType { get; set; }
     }
     public class PayanarType : IPayanarType
     {
@@ -16,6 +18,8 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DataModelss
         public string ParentUniqueId { get; set; } = String.Empty;
         [BsonElement("name")]
         public string Name { get; set; } = String.Empty;
+        [BsonElement("isSystemType")]
+        public bool IsSystemType { get; set; }
     }
     public interface IHierarchicalPayanarType : IPayanarType
     {
@@ -90,5 +94,47 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DataModelss
         public System.String LeastPayanarTableDesignUniqueId { get; set; } = String.Empty;
         [BsonElement("leastPayanarTableColumnDesignUniqueId")]
         public System.String LeastPayanarTableColumnDesignUniqueId { get; set; } = String.Empty;
+    }
+    public class PayanarTable : PayanarType
+    {
+        public PayanarTable()
+        {
+            Rows = new List<PayanarTableRow>();
+        }
+        [BsonElement("rows")]
+        public IEnumerable<PayanarTableRow> Rows { get; set; }
+        public void AddRow(DtoModelss.PayanarTableRow row)
+        {
+            (Rows as IList<PayanarTableRow>).Add(new PayanarTableRow(row.Cells));
+        }
+    }
+    public class PayanarTableRow : PayanarType
+    {
+        public PayanarTableRow() { }
+        public PayanarTableRow(IDictionary<string, DtoModelss.PayanarTableCell> cells)
+        {
+            Cells = new Dictionary<string, PayanarTableCell>();
+            AddCells(cells);
+        }
+        [BsonElement("cells")]
+        public IDictionary<string, PayanarTableCell> Cells { get; set; }
+        public void SetValue(string columnName, string value)
+        {
+            Cells[columnName].Value = value;
+        }
+        private void AddCells(IDictionary<string, DtoModelss.PayanarTableCell> cells)
+        {
+            cells?.ToList().ForEach(v =>
+            {
+                Cells.Add(v.Key, new PayanarTableCell() { ColumnDesignUniqueId = v.Value.ColumnDesignUniqueId, Value = v.Value.Value });
+            });
+        }
+    }
+    public class PayanarTableCell
+    {
+        [BsonElement("columnDesignUniqueId")]
+        public string ColumnDesignUniqueId { get; set; }
+        [BsonElement("value")]
+        public string Value { get; set; }
     }
 }
