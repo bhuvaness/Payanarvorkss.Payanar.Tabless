@@ -60,14 +60,16 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DtoModelss
         System.String OriginalName { get; set; }
         IEnumerable<IPayanarTableColumnDesign> Columns { get; set; }
     }
-    public class PayanarTableDesign : PayanarType
+    public class PayanarTableDesign
     {
-        public PayanarTableDesign()
-        {
-            Columns = new List<PayanarTableColumnDesign>();
-        }
-        public System.String OriginalName { get; set; } = String.Empty;
-        public IEnumerable<PayanarTableColumnDesign> Columns { get; set; }
+        ////public PayanarTableDesign()
+        ////{
+        ////    Columns = new List<PayanarTableColumnDesign>();
+        ////}
+        ///public System.String OriginalName { get; set; } = String.Empty;
+        ///public IEnumerable<PayanarTableColumnDesign> Columns { get; set; }
+        public string UniqueId { get; set; }
+        public string Name { get; set; }
     }
     public interface IPayanarTableColumnDesign : IPayanarType
     {
@@ -85,49 +87,36 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DtoModelss
         public System.String LeastPayanarTableDesignUniqueId { get; set; } = String.Empty;
         public System.String LeastPayanarTableColumnDesignUniqueId { get; set; } = String.Empty;
     }
-    public class PayanarTable : PayanarType
+    public class PayanarTable
     {
-        public PayanarTable()
-        {
-            DataTable = new DataModelss.PayanarTable();
-        }
-        private DataModelss.PayanarTable DataTable { get; set; }
         ////public PayanarTableDesign TableDesign { get; set; }
-        ////public IEnumerable<PayanarTableRow> Rows { get; set; }
-        private IEnumerable<PayanarTableRow> _rows = null;
-        public IEnumerable<PayanarTableRow> Rows
+        public string UniqueId { get; set; } = String.Empty;
+        public string Name { get; set; } = String.Empty;
+        public IEnumerable<PayanarTableRow> Rows { get; set; }
+        public void AddRow(DataModelss.PayanarTableRow row)
         {
-            get
-            {
-                if (_rows == null && DataTable.Rows != null)
-                {
-                    DataTable.Rows.ToList().ForEach(v => { });
-                }
-                return _rows;
-            }
-            set
-            {
-                _rows = value;
-                if (_rows != null)
-                {
-                    _rows.ToList().ForEach(v => { DataTable.AddRow(v); });
-                }
-            }
+            (Rows as IList<DtoModelss.PayanarTableRow>).Add(new DtoModelss.PayanarTableRow(row.Cells) { UniqueId = row.UniqueId });
         }
-        public DataModelss.PayanarTable GetDataTable() { return DataTable; }
     }
-    public class PayanarTableRow : PayanarType
+    public class PayanarTableRow
     {
-        private DataModelss.PayanarTableRow DataRow { get; set; }
+        public PayanarTableRow() { }
+        public PayanarTableRow(IDictionary<string, DataModelss.PayanarTableCell> cells)
+        {
+            AddCells(cells);
+        }
+        public string UniqueId { get; set; } = String.Empty;
         public IDictionary<string, PayanarTableCell> Cells { get; set; }
+        private void AddCells(IDictionary<string, DataModelss.PayanarTableCell> cells)
+        {
+            cells?.ToList().ForEach(v =>
+            {
+                Cells.Add(v.Key, new DtoModelss.PayanarTableCell() { ColumnDesignUniqueId = v.Value.ColumnDesignUniqueId, Value = v.Value.Value });
+            });
+        }
     }
     public class PayanarTableCell
     {
-        public PayanarTableCell()
-        {
-            DataCell = new DataModelss.PayanarTableCell();
-        }
-        private DataModelss.PayanarTableCell DataCell { get; set; }
         public string ColumnDesignUniqueId { get; set; }
         public string Value { get; set; }
     }

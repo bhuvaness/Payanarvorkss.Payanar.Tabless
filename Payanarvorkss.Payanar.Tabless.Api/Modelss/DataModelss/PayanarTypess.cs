@@ -95,20 +95,24 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DataModelss
         [BsonElement("leastPayanarTableColumnDesignUniqueId")]
         public System.String LeastPayanarTableColumnDesignUniqueId { get; set; } = String.Empty;
     }
-    public class PayanarTable : PayanarType
+    public class PayanarTable
     {
         public PayanarTable()
         {
             Rows = new List<PayanarTableRow>();
         }
+        [BsonId]
+        public string UniqueId { get; set; } = String.Empty;
+        [BsonElement("name")]
+        public string Name { get; set; } = String.Empty;
         [BsonElement("rows")]
         public IEnumerable<PayanarTableRow> Rows { get; set; }
         public void AddRow(DtoModelss.PayanarTableRow row)
         {
-            (Rows as IList<PayanarTableRow>).Add(new PayanarTableRow(row.Cells));
+            (Rows as IList<PayanarTableRow>).Add(new PayanarTableRow(row.Cells) { UniqueId = row.UniqueId });
         }
     }
-    public class PayanarTableRow : PayanarType
+    public class PayanarTableRow
     {
         public PayanarTableRow() { }
         public PayanarTableRow(IDictionary<string, DtoModelss.PayanarTableCell> cells)
@@ -116,6 +120,8 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DataModelss
             Cells = new Dictionary<string, PayanarTableCell>();
             AddCells(cells);
         }
+        [BsonId]
+        public string UniqueId { get; set; } = String.Empty;
         [BsonElement("cells")]
         public IDictionary<string, PayanarTableCell> Cells { get; set; }
         public void SetValue(string columnName, string value)

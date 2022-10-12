@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MongoDB.Driver;
+using Payanarvorkss.Payanar.Tabless.Api.Business;
 using Payanarvorkss.Payanar.Tabless.Api.DtoModelss;
 using System.Collections.Generic;
 using System.Data;
@@ -14,30 +15,20 @@ namespace Payanarvorkss.Payanar.Tabless.Api.Controllerss
     public class PayanarTableController : ControllerBase
     {
         [HttpPost]
-        public async Task<PayanarTable> Create([FromBody] PayanarTable table)
+        public async Task<ActionResult<PayanarTable>> Create([FromBody] PayanarTable table)
         {
-            var client = new MongoDB.Driver.MongoClient("mongodb+srv://bhuvaness:Kg3dQIRhQeKmKAt7@cluster0.dt0ycsn.mongodb.net/?retryWrites=true&w=majority");
-            var database = client.GetDatabase("PayanarTabless");
-            var payanarTabless = database.GetCollection<DataModelss.PayanarTable>(table.Name);
-            ////var tableDesign = JsonSerializer.Deserialize<PayanarTableDesign>(json);
-            ////await payanarTabless.InsertOneAsync(table.GetDataTable());
-            return table;
+            PayanarTableBusiness business = new PayanarTableBusiness();
+            await business.Create(table);
+            return Ok(table);
+        }
+        [HttpPost("read")]
+        public async Task<ActionResult<PayanarTable>> Read([FromBody] DtoModelss.PayanarTableDesign tableDesign)
+        {
+            PayanarTableBusiness business = new PayanarTableBusiness();
+            DtoModelss.PayanarTable table = null;//// await business.Read(tableDesign);
+            return Ok(table);
         }
         /*
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<PayanarTableDesign>>> Read()
-        {
-            var client = new MongoDB.Driver.MongoClient("mongodb+srv://bhuvaness:Kg3dQIRhQeKmKAt7@cluster0.dt0ycsn.mongodb.net/?retryWrites=true&w=majority");
-            var database = client.GetDatabase("PayanarTabless");
-            var payanarTabless = database.GetCollection<PayanarTableDesign>("PayanarTableDesignss");
-            var query = await payanarTabless.FindAsync(x => !string.IsNullOrEmpty(x.UniqueId));
-            ////var totalTask = await query.CountAsync();
-            ////var itemsTask = query.Skip(0).Limit(10).ToListAsync();
-            ////await Task.WhenAll(totalTask, itemsTask);
-            ////return new Page { Total = totalTask.Result, Items = itemsTask.Result };
-            var result = query.ToList();
-            return Ok(result);
-        }
         [HttpPatch]
         public async Task<PayanarTableDesign> Update()
         {
