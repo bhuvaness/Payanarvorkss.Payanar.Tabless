@@ -38,7 +38,7 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DtoModelss
         {
         }
         public bool IsPayanarTableDesign { get; set; } = false;
-        public PayanarTableDesign TableDesign { get; set; }
+        public PayanarTableDesignDto TableDesign { get; set; }
         private IEnumerable<HierarchicalPayanarTypeColumn> _children = null;
         public IEnumerable<HierarchicalPayanarTypeColumn> Children
         {
@@ -60,16 +60,14 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DtoModelss
         System.String OriginalName { get; set; }
         IEnumerable<IPayanarTableColumnDesign> Columns { get; set; }
     }
-    public class PayanarTableDesign
+    public class PayanarTableDesignDto : PayanarType
     {
-        ////public PayanarTableDesign()
-        ////{
-        ////    Columns = new List<PayanarTableColumnDesign>();
-        ////}
-        ///public System.String OriginalName { get; set; } = String.Empty;
-        ///public IEnumerable<PayanarTableColumnDesign> Columns { get; set; }
-        public string UniqueId { get; set; }
-        public string Name { get; set; }
+        public PayanarTableDesignDto()
+        {
+            Columns = new List<PayanarTableColumnDesignDto>();
+        }
+        public System.String OriginalName { get; set; } = String.Empty;
+        public IEnumerable<PayanarTableColumnDesignDto> Columns { get; set; }
     }
     public interface IPayanarTableColumnDesign : IPayanarType
     {
@@ -79,7 +77,7 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DtoModelss
         System.String LeastPayanarTableDesignUniqueId { get; set; }
         System.String LeastPayanarTableColumnDesignUniqueId { get; set; }
     }
-    public class PayanarTableColumnDesign : PayanarType, IPayanarTableColumnDesign
+    public class PayanarTableColumnDesignDto : PayanarType, IPayanarTableColumnDesign
     {
         public System.String OriginalName { get; set; }
         public System.String ReferencedPayanarTableDesignUniqueId { get; set; } = String.Empty;
@@ -89,6 +87,10 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DtoModelss
     }
     public class PayanarTable
     {
+        public PayanarTable()
+        {
+            Rows = new List<DtoModelss.PayanarTableRow>();
+        }
         ////public PayanarTableDesign TableDesign { get; set; }
         public string UniqueId { get; set; } = String.Empty;
         public string Name { get; set; } = String.Empty;
@@ -103,10 +105,11 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DtoModelss
         public PayanarTableRow() { }
         public PayanarTableRow(IDictionary<string, DataModelss.PayanarTableCell> cells)
         {
+            Cells = new Dictionary<string, DtoModelss.PayanarTableCell>();
             AddCells(cells);
         }
         public string UniqueId { get; set; } = String.Empty;
-        public IDictionary<string, PayanarTableCell> Cells { get; set; }
+        public IDictionary<string, DtoModelss.PayanarTableCell> Cells { get; set; }
         private void AddCells(IDictionary<string, DataModelss.PayanarTableCell> cells)
         {
             cells?.ToList().ForEach(v =>
@@ -118,6 +121,8 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DtoModelss
     public class PayanarTableCell
     {
         public string ColumnDesignUniqueId { get; set; }
+        public System.String ReferencedPayanarTableDesignUniqueId { get; set; }
+        public System.String ReferencedPayanarTableRowUniqueId { get; set; }
         public string Value { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using Payanarvorkss.Payanar.Tabless.Api.DataModelss;
+using Payanarvorkss.Payanar.Tabless.Api.DtoModelss;
 
 namespace Payanarvorkss.Payanar.Tabless.Api.Business
 {
@@ -18,14 +19,18 @@ namespace Payanarvorkss.Payanar.Tabless.Api.Business
             });
             return dataTable;
         }
-        public async Task<DtoModelss.PayanarTable> Read(DtoModelss.PayanarTableDesign tableDesign)
+        public async Task<DtoModelss.PayanarTable> Read(PayanarTableDesignDto tableDesign)
+        {
+            return await Read(tableDesign.UniqueId);
+        }
+        public async Task<DtoModelss.PayanarTable> Read(string tableUniqueId)
         {
             var client = new MongoDB.Driver.MongoClient("mongodb+srv://bhuvaness:Kg3dQIRhQeKmKAt7@cluster0.dt0ycsn.mongodb.net/?retryWrites=true&w=majority");
             var database = client.GetDatabase("PayanarTabless");
-            var payanarTableRowss = database.GetCollection<DataModelss.PayanarTableRow>(tableDesign.UniqueId);
+            var payanarTableRowss = database.GetCollection<DataModelss.PayanarTableRow>(tableUniqueId);
             var query = await payanarTableRowss.FindAsync(x => !string.IsNullOrEmpty(x.UniqueId));
             var result = query.ToList();
-            DtoModelss.PayanarTable table = ConvertFrom(tableDesign, result);
+            DtoModelss.PayanarTable table = ConvertFrom(tableUniqueId, result);
             return table;
         }
         private DataModelss.PayanarTable ConvertTo(DtoModelss.PayanarTable table)
@@ -42,12 +47,11 @@ namespace Payanarvorkss.Payanar.Tabless.Api.Business
 
             return dataTable;
         }
-        private DtoModelss.PayanarTable ConvertFrom(DtoModelss.PayanarTableDesign tableDesign, IEnumerable<DataModelss.PayanarTableRow> rows)
+        private DtoModelss.PayanarTable ConvertFrom(string tableUniqueId, IEnumerable<DataModelss.PayanarTableRow> rows)
         {
             DtoModelss.PayanarTable table = new DtoModelss.PayanarTable();
 
-            table.UniqueId = tableDesign.UniqueId;
-            table.Name = tableDesign.Name;
+            table.UniqueId = tableUniqueId;
 
             foreach (var row in rows)
             {
