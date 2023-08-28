@@ -3,6 +3,15 @@ using Newtonsoft.Json;
 
 namespace Payanarvorkss.Payanar.Tabless.Api.DataModelss
 {
+    public class PayanarApplicationContext
+    {
+        [BsonId]
+        public string ApplicationId { get; set; } = string.Empty;
+        public string EmailId { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string DatabaseName { get; set; } = string.Empty;
+        public string RootParentId { get; set; } = string.Empty;
+    }
     public interface IPayanarType
     {
         string ParentUniqueId { get; set; }

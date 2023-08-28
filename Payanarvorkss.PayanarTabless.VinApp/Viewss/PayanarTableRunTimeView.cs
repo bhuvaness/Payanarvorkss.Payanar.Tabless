@@ -130,9 +130,8 @@ namespace WinFormsApp1.Viewss
                     form.StartPosition = FormStartPosition.CenterScreen;
                     form.ShowDialog(this);
                     var selectedRow = form.SelectedRow;
-                    
-                    (rowsBindingSource.Current as DataRowView).Row[(rowsDataGridView.Columns[e.ColumnIndex].Tag as PayanarTableColumnDesign).Name] = selectedRow.GetValue((rowsDataGridView.Columns[e.ColumnIndex].Tag as PayanarTableColumnDesign).PayanarTypeSelection.ColumnName);
-                    (rowsBindingSource.Current as DataRowView).Row[(rowsDataGridView.Columns[e.ColumnIndex].Tag as PayanarTableColumnDesign).Name] = selectedRow.GetValue((rowsDataGridView.Columns[e.ColumnIndex].Tag as PayanarTableColumnDesign).PayanarTypeSelection.ColumnName);
+
+                    var row = ((rowsBindingSource.Current as DataRowView).Row["Tag"] as PayanarTableRow);
                     (rowsBindingSource.Current as DataRowView).Row[(rowsDataGridView.Columns[e.ColumnIndex].Tag as PayanarTableColumnDesign).Name] = selectedRow.GetValue((rowsDataGridView.Columns[e.ColumnIndex].Tag as PayanarTableColumnDesign).PayanarTypeSelection.ColumnName);
                 }
             }

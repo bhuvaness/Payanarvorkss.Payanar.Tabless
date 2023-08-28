@@ -1,7 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver;
-using Payanarvorkss.Payanar.Tabless.Api.DataModelss;
-using Payanarvorkss.Payanar.Tabless.Api.DtoModelss;
+﻿using MongoDB.Driver;
 
 namespace Payanarvorkss.Payanar.Tabless.Api.Business
 {
@@ -19,7 +16,7 @@ namespace Payanarvorkss.Payanar.Tabless.Api.Business
             });
             return dataTable;
         }
-        public async Task<DtoModelss.PayanarTable> Read(PayanarTableDesignDto tableDesign)
+        public async Task<DtoModelss.PayanarTable> Read(DtoModelss.PayanarTableDesignDto tableDesign)
         {
             return await Read(tableDesign.UniqueId);
         }

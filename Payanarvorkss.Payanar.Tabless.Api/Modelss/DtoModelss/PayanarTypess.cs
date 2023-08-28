@@ -125,4 +125,57 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DtoModelss
         public System.String ReferencedPayanarTableRowUniqueId { get; set; }
         public string Value { get; set; }
     }
+    public class PayanarRequest<TRequest>
+    {
+        public PayanarRequest()
+        {
+        }
+        public TRequest? Data { get; set; }
+        private string _message = string.Empty;
+        public string Message
+        {
+            get
+            {
+                return _message;
+            }
+            set
+            {
+                _message = value;
+            }
+        }
+    }
+    public class PayanarResponse<TResult>
+    {
+        public PayanarResponse() { }
+        public PayanarResponse(TResult data)
+        {
+            Data = data;
+            IsSuccess = true;
+        }
+        public PayanarResponse(string message)
+        {
+            Message = message;
+            IsSuccess = false;
+        }
+        public PayanarResponse(bool isSuccess, string message)
+        {
+            IsSuccess = isSuccess;
+            Message = message;
+        }
+        private bool _isSuccess = false;
+        public bool IsSuccess { get { return _isSuccess; } set { _isSuccess = value; } }
+        public TResult? Data { get; set; }
+        private string _message = string.Empty;
+        public string Message
+        {
+            get
+            {
+                return _message;
+            }
+            set
+            {
+                _message = value;
+            }
+        }
+    }
 }

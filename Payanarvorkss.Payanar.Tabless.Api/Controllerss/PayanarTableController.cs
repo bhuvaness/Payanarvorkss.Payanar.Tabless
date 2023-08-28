@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MongoDB.Driver;
 using Payanarvorkss.Payanar.Tabless.Api.Business;
-using Payanarvorkss.Payanar.Tabless.Api.BusinessModelss;
 using Payanarvorkss.Payanar.Tabless.Api.DtoModelss;
 using System.Collections.Generic;
 using System.Data;
