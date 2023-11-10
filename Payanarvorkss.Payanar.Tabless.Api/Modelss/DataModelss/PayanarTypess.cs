@@ -32,11 +32,23 @@ namespace Payanarvorkss.Payanar.Tabless.Api.DataModelss
     }
     public interface IHierarchicalPayanarType : IPayanarType
     {
-        IEnumerable<IHierarchicalPayanarType> Children { get; set; }
+        IEnumerable<HierarchicalPayanarType> Children { get; set; }
     }
     public class HierarchicalPayanarType : PayanarType, IHierarchicalPayanarType
     {
-        public IEnumerable<IHierarchicalPayanarType> Children { get; set; }
+        ////private IEnumerable<IHierarchicalPayanarType> _children = null;
+        public IEnumerable<HierarchicalPayanarType> Children { get; set; }
+        ////{
+        ////    get
+        ////    {
+        ////        if (_children == null)
+        ////        {
+        ////            _children = new List<IHierarchicalPayanarType>();
+        ////        }
+        ////        return _children;
+        ////    }
+        ////    set { _children = value; }
+        ////}
     }
     public interface IHierarchicalPayanarTypeColumn : IPayanarType
     {

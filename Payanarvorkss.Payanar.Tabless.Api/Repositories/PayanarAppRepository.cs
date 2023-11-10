@@ -61,11 +61,37 @@ namespace Payanarvorkss.Payanar.Tabless.Api.Repositories
 
         private async Task<IEnumerable<DataModelss.HierarchicalPayanarType>> ReadHierarchicalPayanarType(PayanarApplicationContext context, MongoClient client)
         {
+            IEnumerable<Task> tasks = new List<Task>();
             var database = client.GetDatabase(context.DatabaseName);
             var payanarTypess = database.GetCollection<DataModelss.HierarchicalPayanarType>("HierarchicalPayanarTypess");
-            var query = await payanarTypess.FindAsync(x => !string.IsNullOrEmpty(context.RootParentId));
+            var query = await payanarTypess.FindAsync(x => !string.IsNullOrEmpty(x.ParentUniqueId) && x.ParentUniqueId.Equals(context.RootParentId));
             var hierarchicalTypess = query.ToList().OrderBy(x => x.Name).ToList();
+            ReadHierarchicalPayanarType(tasks, payanarTypess, hierarchicalTypess);
+            Task.WaitAll(tasks.ToArray());
             return hierarchicalTypess;
+        }
+
+        private async Task ReadHierarchicalPayanarType(IEnumerable<Task> tasks, IMongoCollection<DataModelss.HierarchicalPayanarType> mongoCollection, IEnumerable<DataModelss.HierarchicalPayanarType> hierarchicalPayanarTypes)
+        {
+            if (hierarchicalPayanarTypes != null)
+            {
+                foreach (var item in hierarchicalPayanarTypes)
+                {
+                    (tasks as IList<Task>).Add(ReadHierarchicalPayanarType(tasks, mongoCollection, item, item.UniqueId));
+                }
+            }
+        }
+
+        private async Task ReadHierarchicalPayanarType(IEnumerable<Task> tasks, IMongoCollection<DataModelss.HierarchicalPayanarType> mongoCollection, DataModelss.HierarchicalPayanarType hierarchicalPayanarType, string parentId)
+        {
+            var query = await mongoCollection.FindAsync(x => !string.IsNullOrEmpty(x.ParentUniqueId) && x.ParentUniqueId.Equals(parentId));
+            var hierarchicalTypess = query.ToList().OrderBy(x => x.Name).ToList();
+            if (hierarchicalTypess != null && hierarchicalTypess.Count > 0)
+            {
+                hierarchicalPayanarType.Children = new List<DataModelss.HierarchicalPayanarType>();
+                (hierarchicalPayanarType.Children as List<DataModelss.HierarchicalPayanarType>).AddRange(hierarchicalTypess);
+                ReadHierarchicalPayanarType(tasks, mongoCollection, hierarchicalTypess);
+            }
         }
     }
 }
